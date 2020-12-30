@@ -21,8 +21,9 @@ class Tutorial {
 	int _finished;
 
 	String _image;
+	String _video;
 
-	Tutorial(this._id, this._title, this._content, this._duration, this._category, this._starred, this._finished, this._image);
+	Tutorial(this._id, this._title, this._content, this._duration, this._category, this._starred, this._finished, this._image, this._video);
 
 	int get getId 		   => _id;
 	int get getDuration    => _duration;
@@ -32,6 +33,7 @@ class Tutorial {
 	String get getContent  => _content;
 	String get getCategory => _category;
 	String get getImage	   => _image;
+	String get getVideo    => _video;
 
 	set starred(int stars) => _starred = stars;
 	set finished(int finished) => _finished = finished;

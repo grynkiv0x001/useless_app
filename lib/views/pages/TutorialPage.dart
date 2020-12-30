@@ -97,6 +97,16 @@ class _TutorialPageState extends State<TutorialPage> {
 				),
 				Container(
 					child: Text(tutorial.getContent)
+				),
+				FlatButton(
+					child: Text("Перейти до відео"),
+					textColor: Colors.white,
+					shape: StadiumBorder(),
+					color: Colors.green,
+					onPressed: () {},
+				),
+				SizedBox(
+					height: 10
 				)
 			],
 		);

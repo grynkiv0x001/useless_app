@@ -34,7 +34,6 @@ class _BrowseState extends State<Browse> {
 
 	Future<List<Tutorial>> getAllMusicTutorials() async {
 
-		// String sql = "SELECT * FROM tutorials WHERE category = '${this.category}'";
 		String sql = "SELECT * FROM tutorials";
 
 		DatabaseConnector connector = DatabaseConnector();

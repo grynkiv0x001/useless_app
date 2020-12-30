@@ -7,6 +7,7 @@
 */
 
 import 'package:casual_learning_app/configs/CLATheme.dart';
+import 'package:casual_learning_app/configs/DatabaseConnector.dart';
 import 'package:casual_learning_app/configs/Keys.dart';
 import 'package:casual_learning_app/views/pages/TutorialPage.dart';
 import "package:flutter/material.dart";
@@ -51,6 +52,15 @@ class _CLAListItemState extends State<CLAListItem> {
 		return customListItem(this._tutorial);
 	}
 
+	void updateStars(Tutorial tutorial) {
+		
+		DatabaseConnector connector = DatabaseConnector();
+
+		String sql = "UPDATE tutorials SET starred = '${tutorial.getStarred}' WHERE id = '${tutorial.getId}'";
+
+		connector.tutorials(sql);
+	}
+
 	Widget customListItem(Tutorial tutorial) {
 
 		return Container(
@@ -80,11 +90,14 @@ class _CLAListItemState extends State<CLAListItem> {
 					color: !isStarred ? _starColor : _starredColor,
 					onPressed: () {
 						setState(() {
-							isStarred = !isStarred;
+							isStarred = isStarred;
+
 							if (isStarred)
 								tutorial.starred = tutorial.getStarred + 1;
 							else
 								tutorial.starred = tutorial.getStarred - 1;
+
+							updateStars(tutorial);
 						});
 					}
 				),

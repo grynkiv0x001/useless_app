@@ -58,7 +58,8 @@ class DatabaseConnector {
 				query[i][4].toString(),
 				int.parse(query[i][5].toString()),
 				int.parse(query[i][6].toString()),
-				query[i][7].toString()
+				query[i][7].toString(),
+				query[i][8].toString()
 			));
 		}
 

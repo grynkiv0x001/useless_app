@@ -92,7 +92,6 @@ class _MusicState extends State<Music> {
 			if (list[j].getDuration < pivot) {
 				i++;
 				swap(list, i, j);
-				print(list[j].getDuration);
 			}
 		}
 		
@@ -151,25 +150,40 @@ class _MusicState extends State<Music> {
 		return Scaffold(
 			appBar: CLAAppbar.customAppbar("Мистецтво"),
 			body: claListView,
+			bottomSheet: Row(
+				children: [
+					Text("Сортування за часом/відстеженнями та пошук за зірками"),
+				],
+				mainAxisAlignment: MainAxisAlignment.center
+			),
 			bottomNavigationBar: ButtonBar(
-				alignment: MainAxisAlignment.center,
+				alignment: MainAxisAlignment.spaceBetween,
 				children: [
 					RaisedButton(
 						child: Text("Швидке сортування"),
+						shape: StadiumBorder(),
+						color: Colors.deepOrange,
 						onPressed: () {
-							quickSort(tuts, 0, tuts.length - 1);
+							claListView = null;
+							setState(() => quickSort(tuts, 0, tuts.length - 1));
 						},
 					),
 					RaisedButton(
 						child: Text("Вставками"),
+						shape: StadiumBorder(),
+						color: Colors.deepOrange,
 						onPressed: () {
-							insertionSort(tuts, tuts.length);
+							claListView = null;
+							setState(() => insertionSort(tuts, tuts.length));
 						},
 					),
 					RaisedButton(
 						child: Text("Лінійний пошук"),
+						shape: StadiumBorder(),
+						color: Colors.deepOrange,
 						onPressed: () {
-							linearSearch(90);
+							claListView = null;
+							setState(() => linearSearch(90));
 						},
 					)
 				],

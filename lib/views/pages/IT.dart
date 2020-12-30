@@ -82,8 +82,6 @@ class _ITState extends State<IT> {
 			}
 
 			list[i + 1].duration = key;
-
-			print(key);
 		}
 
 		return list;
@@ -155,25 +153,40 @@ class _ITState extends State<IT> {
 		return Scaffold(
 			appBar: CLAAppbar.customAppbar("ІТ: для хобі та роботи"),
 			body: claListView,
+			bottomSheet: Row(
+				children: [
+					Text("Сортування за часом/назвою та пошук за відстеженнями"),
+				],
+				mainAxisAlignment: MainAxisAlignment.center
+			),
 			bottomNavigationBar: ButtonBar(
-				alignment: MainAxisAlignment.center,
+				alignment: MainAxisAlignment.spaceBetween,
 				children: [
 					RaisedButton(
 						child: Text("Вставками"),
+						shape: StadiumBorder(),
+						color: Colors.indigo,
 						onPressed: () {
-							insertionSort(tuts, tuts.length);
+							claListView = null;
+							setState(() => insertionSort(tuts, tuts.length));
 						},
 					),
 					RaisedButton(
 						child: Text("Бульбашкове"),
+						shape: StadiumBorder(),
+						color: Colors.indigo,
 						onPressed: () {
-							bubbleSort(tuts);
+							claListView = null;
+							setState(() => bubbleSort(tuts));
 						},
 					),
 					RaisedButton(
 						child: Text("Пошук стрибками"),
+						shape: StadiumBorder(),
+						color: Colors.indigo,
 						onPressed: () {
-							jumpSearch(tuts, 3);
+							claListView = null;
+							setState(() => jumpSearch(tuts, 3));
 						},
 					)
 				],

@@ -25,9 +25,9 @@ class _SettingsState extends State<Settings> {
 	Widget build(BuildContext context) {
 
 		return Scaffold(
-			appBar: CLAAppbar.customAppbar("App configuration"),
+			appBar: CLAAppbar.customAppbar("Налаштування"),
 			body: Center(
-				child: Text("Settings page..."),
+				child: Text("Дана функція в процесі розробки..."),
 			),
 		);
 	}
