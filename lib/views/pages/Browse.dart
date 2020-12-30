@@ -104,7 +104,7 @@ class _BrowseState extends State<Browse> {
 											color: Colors.white
 										)
 									),
-									width: 95,
+									width: 110,
 									height: 40,
 									alignment: Alignment.center
 								),
@@ -127,7 +127,7 @@ class _BrowseState extends State<Browse> {
 											color: Colors.white
 										)
 									),
-									width: 95,
+									width: 110,
 									height: 40,
 									alignment: Alignment.center
 								),
@@ -155,7 +155,7 @@ class _BrowseState extends State<Browse> {
 											color: Colors.white
 										)
 									),
-									width: 95,
+									width: 110,
 									height: 40,
 									alignment: Alignment.center
 								),
@@ -178,7 +178,7 @@ class _BrowseState extends State<Browse> {
 											color: Colors.white
 										)
 									),
-									width: 95,
+									width: 110,
 									height: 40,
 									alignment: Alignment.center
 								),

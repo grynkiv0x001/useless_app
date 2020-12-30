@@ -6,6 +6,9 @@
  * 
 */
 
+import 'dart:math';
+
+import 'package:casual_learning_app/views/widgets/CLAListView.dart';
 import 'package:flutter/material.dart';
 
 import 'package:casual_learning_app/configs/DatabaseConnector.dart';
@@ -36,10 +39,60 @@ class _ITState extends State<IT> {
 	_ITState(String category) {
 		this.category = category;
 	}
-
+	
 	CLAListItem claListItem;
+	CLAListView claListView;
 
-	static List<Tutorial> bubbleSort(List<Tutorial> list) {
+	List<Tutorial> tuts = List<Tutorial>();
+
+	Future<List<Tutorial>> getAllMusicTutorials(String sql) async {
+
+		DatabaseConnector connector = DatabaseConnector();
+
+		List<Tutorial> tutorials = await connector.tutorials(sql);
+
+		return tutorials;
+	}
+
+	void reallyGetMusicTuts(String sql) async {
+
+		var tmp = await getAllMusicTutorials(sql);
+
+		setState(() {
+			tuts = tmp;
+			claListView = CLAListView(tuts);
+		});
+	}
+
+	// #1 Insertion sort
+	List<Tutorial> insertionSort(List<Tutorial> list, int length) {
+
+		reallyGetMusicTuts("SELECT * FROM tutorials WHERE category = '${this.category}' ORDER BY duration ASC");
+		
+		for (int j = 1; j < length; j++) {
+
+			int key = list[j].getDuration;
+
+			int i = j - 1;
+
+			while (i >= 0 && list[i].getDuration > key) {
+
+				list[i + 1].duration = list[i].getDuration;
+				i = i - 1;
+			}
+
+			list[i + 1].duration = key;
+
+			print(key);
+		}
+
+		return list;
+	}
+
+	// #2 Bubble sort
+	List<Tutorial> bubbleSort(List<Tutorial> list) {
+
+		reallyGetMusicTuts("SELECT * FROM tutorials WHERE category = '${this.category}' ORDER BY title ASC");
 
 		int length = list.length;
 
@@ -47,14 +100,12 @@ class _ITState extends State<IT> {
 
 			for (int ii = 0; ii < length - i - 1; ii++) {
 
-				if (list[ii].getStarred > list[ii + 1].getStarred) {
+				if (list[ii].getTitle.compareTo(list[ii + 1].getTitle) != null) {
 
 					int temp = list[ii].getStarred;
 
 					list[ii].starred = list[ii + 1].getStarred;
 					list[ii + 1].starred = temp;
-
-					print(temp);
 				}
 			}
 		}
@@ -62,135 +113,71 @@ class _ITState extends State<IT> {
 		return list;
 	}
 
-	List<Tutorial> quickSort(List<Tutorial> list, int low, int high) {
+	// #3 Jump Search
+	Tutorial jumpSearch(List<Tutorial> list, int stars) {
 
-		if (low < high) {
-			int pivot = partition(list, low, high);
+		reallyGetMusicTuts("SELECT * FROM tutorials WHERE starred = '$stars'");
 
-			quickSort(list, low, pivot - 1);
-			quickSort(list, pivot + 1, high);
+		int n = list.length;
+
+		int step = sqrt(n).toInt();
+
+		int prev = 0;
+
+		while (list[min(step, n) - 1].getStarred < stars) {
+
+			prev = step;
+
+			step += sqrt(n).toInt();
+
+			if (prev >= n)
+				return null;
 		}
 
-		return list;
-	}
+		while (list[prev].getStarred < stars) {
 
-	int partition(List<Tutorial> list, int low, int high) {
-		
-		if (list.isEmpty)
-			return 0;
+			prev++;
 
-		int pivot = list[high].getDuration;
-
-		int i = low - 1;
-
-		for (int j = low; j < high; j++) {
-
-			if (list[j].getDuration < pivot) {
-				i++;
-				swap(list, i, j);
-				print(list[j].getDuration);
+			if (prev == min(step, n)) {
+				return null;
 			}
 		}
-		
-		swap(list, i + 1, high);
 
-		return i + 1;
-	}
+		if (list[prev].getStarred == stars)
+			return list[prev];
 
-	void swap(List<Tutorial> list, int i, int j) {
-		
-		int temp = list[i].getDuration;
-
-		list[i].duration = list[j].getDuration;
-		list[j].duration = temp;
+		return null;
 	}
 
 	@override
 	Widget build(BuildContext context) {
 
-		final GlobalKey starredState = GlobalKey();
-
-		DatabaseConnector connector = DatabaseConnector();
-
-		// String _sql = "SELECT * FROM tutorials WHERE category = '${this.category}'";
-		String _sql = "SELECT * FROM tutorials";
-
-		List<Tutorial> list = [];
-
 		return Scaffold(
 			appBar: CLAAppbar.customAppbar("ІТ: для хобі та роботи"),
-			body: FutureBuilder<List<Tutorial>>(
-				future: connector.tutorials(_sql),
-				initialData: List(),
-				builder: (BuildContext context, AsyncSnapshot<List<Tutorial>> snapshot) {
-					if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-
-						list = snapshot.data;
-
-						return ListView.builder(
-							padding: EdgeInsets.fromLTRB(15.0, 20.0, 15.0, 5.0),
-							itemCount: list.length,
-							itemBuilder: (context, index) {
-								claListItem = CLAListItem(list[index]);
-								print(list[index].getTitle);
-								return Container(
-									padding: EdgeInsets.only(top: 5.0),
-									child: claListItem
-								);
-							},
-						);
-					} else if (snapshot.hasError) {
-						return Center(
-							child: Text("Failed: ${snapshot.error}", style: TextStyle(color: Colors.red)),
-						);
-					}
-					return Center(
-						child: CircularProgressIndicator()
-					);
-				}
+			body: claListView,
+			bottomNavigationBar: ButtonBar(
+				alignment: MainAxisAlignment.center,
+				children: [
+					RaisedButton(
+						child: Text("Вставками"),
+						onPressed: () {
+							insertionSort(tuts, tuts.length);
+						},
+					),
+					RaisedButton(
+						child: Text("Бульбашкове"),
+						onPressed: () {
+							bubbleSort(tuts);
+						},
+					),
+					RaisedButton(
+						child: Text("Пошук стрибками"),
+						onPressed: () {
+							jumpSearch(tuts, 3);
+						},
+					)
+				],
 			),
-			bottomNavigationBar: BottomAppBar(
-				child: IconButton(
-					icon: Icon(Icons.filter_alt_outlined),
-					onPressed: () {
-						var listiq = quickSort(list, list.length - 1, 0);
-						setState(() => list = listiq);
-					}
-					// onPressed: () {
-					// 	showDialog(context: context, child:
-					// 		AlertDialog(
-					// 			title: Text("Налаштування змісту"),
-					// 			content: Column(
-					// 				children: [
-					// 					SizedBox(
-					// 						height: 20
-					// 					),
-					// 					OutlineButton(
-					// 						child: Text("Швидке сортування"),
-					// 						onPressed: () {},
-					// 					),
-					// 					SizedBox(
-					// 						height: 20
-					// 					),
-					// 					OutlineButton(
-					// 						child: Text("Сортування вставками"),
-					// 						onPressed: () {},
-					// 					),
-					// 					SizedBox(
-					// 						height: 20
-					// 					),
-					// 					OutlineButton(
-					// 						child: Text("Лінійний пошук"),
-					// 						onPressed: () {},
-					// 					)
-					// 				]
-					// 			),
-					// 			contentPadding: EdgeInsets.all(0.0)
-					// 		)
-					// 	);
-					// }
-				)
-			)
 		);
 	}
 }

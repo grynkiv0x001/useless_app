@@ -49,7 +49,7 @@ class _CookingState extends State<Cooking> {
 		String _sql = "SELECT * FROM tutorials WHERE category = '${this.category}'";
 
 		return Scaffold(
-			appBar: CLAAppbar.customAppbar("Кулінарія простіше"),
+			appBar: CLAAppbar.customAppbar("Кулінарія"),
 			body: FutureBuilder<List<Tutorial>>(
 				future: connector.tutorials(_sql),
 				initialData: List(),
