@@ -183,7 +183,7 @@ class _MusicState extends State<Music> {
 						color: Colors.deepOrange,
 						onPressed: () {
 							claListView = null;
-							setState(() => linearSearch(90));
+							setState(() => linearSearch(0));
 						},
 					)
 				],

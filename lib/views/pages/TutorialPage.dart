@@ -7,6 +7,7 @@
 */
 
 import "package:flutter/material.dart";
+import "package:url_launcher/url_launcher.dart";
 
 import "package:casual_learning_app/configs/DatabaseConnector.dart";
 import 'package:casual_learning_app/views/widgets/CLAAppbar.dart';
@@ -78,6 +79,15 @@ class _TutorialPageState extends State<TutorialPage> {
 		);
 	}
 
+	static _launchURL(String url) async {
+		
+		if (await canLaunch(url)) {
+			await launch(url);
+		} else {
+			throw "Couldn't launch $url";
+		}
+	}
+
 	static Widget showTutorial(Tutorial tutorial) {
 
 		return Column(
@@ -103,7 +113,7 @@ class _TutorialPageState extends State<TutorialPage> {
 					textColor: Colors.white,
 					shape: StadiumBorder(),
 					color: Colors.green,
-					onPressed: () {},
+					onPressed: _launchURL(tutorial.getVideo),
 				),
 				SizedBox(
 					height: 10

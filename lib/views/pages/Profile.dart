@@ -74,7 +74,7 @@ class _ProfileState extends State<Profile> {
 											children: [
 												Container(
 													child: Text(
-														"Пройдених занять: ${userProfile.getFinished} ",
+														"Пройдених занять: 6",
 														style: TextStyle(
 															fontSize: 16,
 															color: Colors.black

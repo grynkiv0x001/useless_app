@@ -114,7 +114,7 @@ class _ITState extends State<IT> {
 	// #3 Jump Search
 	Tutorial jumpSearch(List<Tutorial> list, int stars) {
 
-		reallyGetMusicTuts("SELECT * FROM tutorials WHERE starred = '$stars'");
+		reallyGetMusicTuts("SELECT * FROM tutorials WHERE category = '${this.category} ORDER BY DESC'");
 
 		int n = list.length;
 
@@ -163,7 +163,7 @@ class _ITState extends State<IT> {
 				alignment: MainAxisAlignment.spaceBetween,
 				children: [
 					RaisedButton(
-						child: Text("Вставками"),
+						child: Text("Вибором"),
 						shape: StadiumBorder(),
 						color: Colors.indigo,
 						onPressed: () {
@@ -186,7 +186,7 @@ class _ITState extends State<IT> {
 						color: Colors.indigo,
 						onPressed: () {
 							claListView = null;
-							setState(() => jumpSearch(tuts, 3));
+							setState(() => jumpSearch(tuts, 0));
 						},
 					)
 				],

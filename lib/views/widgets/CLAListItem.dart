@@ -90,7 +90,7 @@ class _CLAListItemState extends State<CLAListItem> {
 					color: !isStarred ? _starColor : _starredColor,
 					onPressed: () {
 						setState(() {
-							isStarred = isStarred;
+							isStarred = !isStarred;
 
 							if (isStarred)
 								tutorial.starred = tutorial.getStarred + 1;
